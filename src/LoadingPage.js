@@ -1,6 +1,6 @@
 import { SEU_USER_ID } from "./OpenDotaDB"
-import { BrowserRouter, Routes, Route, useParams, useNavigate, json } from "react-router-dom"
-import { useState, useEffect } from "react"
+import { BrowserRouter, Routes, Route, useParams, useNavigate, json, useRouteLoaderData } from "react-router-dom"
+import { useState, useEffect, useLayoutEffect } from "react"
 import { TextField, Button } from "@mui/material"
 
 function LoadUserData() {
@@ -8,46 +8,45 @@ function LoadUserData() {
     const navigate = useNavigate()
     const params = useParams()
     const [profileData, setProfileData] = useState({})
-    const [id, setID] = useState(!params.id ? params.id : SEU_USER_ID)
+    const [id, setID] = useState(params.queryId ? params.queryId : '')
 
-    const handleSubmit=(event)=>{
+
+    const handleSubmit = (event) => {
         event.preventDefault()
         navigate(`/player/${id}`)
     }
 
-    const onSearchChanged=(event)=> {
+    const onSearchChanged = (event) => {
         setID(event.target.value)
     }
 
     useEffect(() => {
-        fetchUserProfileData();
-    }, [params.id]);
-
-    const fetchUserProfileData = () => {
+        let mounted = true;
         fetch(`https://api.opendota.com/api/players/${id}`).then((Response) => Response.json()).then((data) => {
-            setProfileData(data)
             console.log(data)
+            setProfileData(data)
+            console.log(profileData)
         })
-    };
-
+        return () => mounted = false;
+    }, [params.queryId]);
 
     return <div>
         <form onSubmit={handleSubmit}>
-        <TextField
-            id="serach"
-            label="Search"
-            variant="outlined"
-            size="medium"
-            value={id}
-            onChange={onSearchChanged}
-        ></TextField> {' '}
-        <Button variant="contained" size="large" onClick={handleSubmit}>Search</Button>
+            <TextField
+                id="serach"
+                label="Search"
+                variant="outlined"
+                size="medium"
+                value={id}
+                onChange={onSearchChanged}
+            ></TextField> {' '}
+            <Button variant="contained" size="large" onClick={handleSubmit}>Search</Button>
 
-            {!profileData ? <div>
-                <h2>Player Name: {profileData.profile.personaname}</h2>
+            <div>
+                {/* <h2 >Player Name: {profileData.profile.personaname}</h2>
                 <h2>MMR : {profileData.mmr_estimate.estimate}</h2>
-                <img src={profileData.profile.avatarmedium}></img>
-            </div> : <p></p>}
+                <img src={profileData.profile.avatar}></img> */}
+            </div>
         </form>
 
     </div>
@@ -57,7 +56,7 @@ function HomePage() {
 
     return <div>
         <h1>This is Homepage</h1>
-    
+
     </div>
 }
 
@@ -66,8 +65,8 @@ function LoadingPage() {
         <h1>Open Dota Project</h1>
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<HomePage/>}></Route>
-                <Route path="/player/:id" element={<LoadUserData />}></Route>
+                <Route path="/" element={<HomePage />}></Route>
+                <Route path="/player/:queryId" element={<LoadUserData />}></Route>
                 <Route path="*" element={<p>404 Page Not Found</p>} />
             </Routes>
         </BrowserRouter>
