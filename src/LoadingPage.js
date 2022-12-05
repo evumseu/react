@@ -1,4 +1,4 @@
-import { SEU_USER_ID } from "./OpenDotaDB"
+import { SEU_USER_ID, ProfileData } from "./OpenDotaDB"
 import { BrowserRouter, Routes, Route, useParams, useNavigate, json, useRouteLoaderData } from "react-router-dom"
 import { useState, useEffect, useLayoutEffect } from "react"
 import { TextField, Button } from "@mui/material"
@@ -7,7 +7,7 @@ function LoadUserData() {
 
     const navigate = useNavigate()
     const params = useParams()
-    const [profileData, setProfileData] = useState({})
+    const [profileData, setProfileData] = useState(ProfileData)
     const [id, setID] = useState(params.queryId ? params.queryId : '')
 
 
@@ -43,9 +43,9 @@ function LoadUserData() {
             <Button variant="contained" size="large" onClick={handleSubmit}>Search</Button>
 
             <div>
-                {/* <h2 >Player Name: {profileData.profile.personaname}</h2>
+                <h2 >Player Name: {profileData.profile.personaname}</h2>
                 <h2>MMR : {profileData.mmr_estimate.estimate}</h2>
-                <img src={profileData.profile.avatar}></img> */}
+                <img src={profileData.profile.avatar}></img>
             </div>
         </form>
 
