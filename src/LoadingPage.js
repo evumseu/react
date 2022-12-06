@@ -1,7 +1,8 @@
 import { SEU_USER_ID, ProfileData } from "./OpenDotaDB"
 import { BrowserRouter, Routes, Route, useParams, useNavigate, json, useRouteLoaderData } from "react-router-dom"
+import * as React from 'react';
 import { useState, useEffect, useLayoutEffect } from "react"
-import { TextField, Button } from "@mui/material"
+import { TextField, Button, Box, Card, CardActions, CardContent, Typography} from "@mui/material"
 
 function LoadUserData() {
 
@@ -20,14 +21,21 @@ function LoadUserData() {
         setID(event.target.value)
     }
 
+    const bull = (
+        <Box
+          component="span"
+          sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
+        >
+          •
+        </Box>
+      );
+
     useEffect(() => {
-        let mounted = true;
         fetch(`https://api.opendota.com/api/players/${id}`).then((Response) => Response.json()).then((data) => {
             console.log(data)
             setProfileData(data)
             console.log(profileData)
         })
-        return () => mounted = false;
     }, [params.queryId]);
 
     return <div>
@@ -43,6 +51,27 @@ function LoadUserData() {
             <Button variant="contained" size="large" onClick={handleSubmit}>Search</Button>
 
             <div>
+            <React.Fragment>
+    <CardContent>
+      <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+        Word of the Day
+      </Typography>
+      <Typography variant="h5" component="div">
+        be{bull}nev{bull}o{bull}lent
+      </Typography>
+      <Typography sx={{ mb: 1.5 }} color="text.secondary">
+        adjective
+      </Typography>
+      <Typography variant="body2">
+        well meaning and kindly.
+        <br />
+        {'"a benevolent smile"'}
+      </Typography>
+    </CardContent>
+    <CardActions>
+      <Button size="small">Learn More</Button>
+    </CardActions>
+  </React.Fragment>
                 <h2 >Player Name: {profileData.profile.personaname}</h2>
                 <h2>MMR : {profileData.mmr_estimate.estimate}</h2>
                 <img src={profileData.profile.avatar}></img>
