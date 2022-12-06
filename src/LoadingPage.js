@@ -1,8 +1,8 @@
-import { SEU_USER_ID, ProfileData } from "./OpenDotaDB"
+import { SEU_USER_ID, ProfileData, WinLost } from "./OpenDotaDB"
 import { BrowserRouter, Routes, Route, useParams, useNavigate, NavLink, Navigate, useRouteLoaderData } from "react-router-dom"
 import * as React from 'react';
 import { useState, useEffect, useLayoutEffect, MouseEvent } from "react"
-import { TextField, Button, Box, Card, CardActions, CardContent, Typography } from "@mui/material"
+import { TextField, Button, Box, Avatar, Card, CardActions, CardContent, Typography } from "@mui/material"
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import './LoadingPage.css';
@@ -12,6 +12,7 @@ function LoadUserData() {
     const navigate = useNavigate()
     const params = useParams()
     const [profileData, setProfileData] = useState(ProfileData)
+    const [winLost, setWinLost] = useState(WinLost);
     const [id, setID] = useState(params.queryId ? params.queryId : SEU_USER_ID)
 
 
@@ -24,19 +25,13 @@ function LoadUserData() {
         setID(event.target.value)
     }
 
-    const bull = (
-        <Box
-            component="span"
-            sx={{ display: 'inline-block', mx: '2px', transform: 'scale(0.8)' }}
-        >
-        </Box>
-    );
-
     useEffect(() => {
         fetch(`https://api.opendota.com/api/players/${id}`).then((Response) => Response.json()).then((data) => {
-            console.log(data)
             setProfileData(data)
-            console.log(profileData)
+        })
+
+        fetch(`https://api.opendota.com/api/players/${id}/wl`).then((Response) => Response.json()).then((data) => {
+            setWinLost(data)
         })
     }, [params.queryId]);
 
@@ -53,30 +48,36 @@ function LoadUserData() {
             <Button variant="contained" size="large" onClick={handleSubmit}>Search</Button>
 
             <div>
-                <React.Fragment>
-                    <CardContent variant="outlined">
-                        <Typography mt={2} variant="h4" color="text.primary" gutterBottom>
-                            Player Name: {profileData.profile.personaname}
+                <div className="container">
+                    <Avatar
+                        className="img"
+                        alt={profileData.profile.personaname}
+                        src={profileData.profile.avatarfull}
+                        sx={{ width: 120, height: 120 }}
+                    />
+                    <Typography textAlign={"center"} variant="h4" color="text.primary">
+                        {profileData.profile.personaname}
+                    </Typography>
+
+                    <Typography mt={2} textAlign={"center"} variant="h5" color="text.primary">
+                        MMR : {profileData.mmr_estimate.estimate}
+                    </Typography>
+
+                    <div className="content">
+                        <Typography mt={2} mr={8} variant="h5" color="green">
+                            Win: {winLost.win}
                         </Typography>
-                        <Typography variant="h5" component="div">
-                            {bull}nev{bull}o{bull}lent
+
+                        <Typography mt={2} variant="h5" color="red">
+                            Lost: {winLost.lose}
                         </Typography>
-                        <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                            adjective
-                        </Typography>
-                        <Typography variant="body2">
-                            well meaning and kindly.
-                            <br />
-                            {'"a benevolent smile"'}
-                        </Typography>
-                    </CardContent>
-                    <CardActions>
-                        <Button size="small">Learn More</Button>
-                    </CardActions>
-                </React.Fragment>
-                <h2 >Player Name: {profileData.profile.personaname}</h2>
-                <h2>MMR : {profileData.mmr_estimate.estimate}</h2>
-                <img src={profileData.profile.avatar}></img>
+                    </div>
+
+                    <Typography mt={2} textAlign={"center"} variant="h5" color="text.primary">
+                        Win Rate : {((winLost.win /(winLost.lose + winLost.win)) * 100).toFixed(2)}%
+                    </Typography>
+                </div>
+
             </div>
         </form>
 
@@ -107,7 +108,6 @@ function LoadingPage() {
 }
 
 function TopAppHeader() {
-    const navigate = useNavigate()
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -133,7 +133,7 @@ function TopAppHeader() {
                     <Button color="inherit"><NavLink
                         to={`player/${SEU_USER_ID}`}
                         style={{
-                            color:'white',
+                            color: 'white',
                             textDecoration: 'none',
                         }}>
                         Player
