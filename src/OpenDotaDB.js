@@ -60,6 +60,16 @@ export const RecentMatches = [
 
 ]
 
+export const playerLists = [
+    {
+      "account_id": '',
+      "personaname": "",
+      "avatarfull": "",
+      "last_match_time": "",
+      "similarity": ''
+    },
+]
+
 
 export const WinLost = {
  "win": 0,"lose": 0
