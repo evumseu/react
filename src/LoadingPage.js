@@ -306,7 +306,6 @@ function PlayerList() {
 
     }
 
-
     return <div>
         <Grid container spacing={2} direction="row" justify="flex-start" alignItems="flex-start">
 
