@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useState, useEffect } from "react"
 import { TextField, Button, Box, Avatar, Card, CardActions, CardContent, CardMedia, Typography, AppBar, Toolbar, Grid } from "@mui/material"
 import { DataGrid } from '@mui/x-data-grid';
-import { convertDate, getHero, getHeroAvatar, getTeam, getResult, generateRandom} from "./Utils"
+import { convertDate, getHero, getHeroAvatar, getTeam, getResult, generateRandom, getGameMode, getDuration, getCountry, getRole} from "./Utils"
 import './LoadingPage.css';
 
 function LoadUserData() {
@@ -165,32 +165,20 @@ function MatchesTable(props) {
                 );
             }
         },
-        {
-            field: 'player_slot',
-            headerName: 'Team',
-            width: 130,
-            valueGetter: getTeam,
-        },
-        {
-            field: 'radiant_win',
-            headerName: 'Result',
-            width: 130,
-            valueGetter: getResult,
-        },
+        { field: 'player_slot', headerName: 'Team', width: 130, valueGetter: getTeam},
+        { field: 'radiant_win', headerName: 'Result', width: 130, valueGetter: getResult},
         { field: 'kills', headerName: 'Kills', width: 130 },
         { field: 'deaths', headerName: 'Deaths', width: 130 },
         { field: 'assists', headerName: 'Assists', width: 130 },
-        {
-            field: 'average_rank',
-            headerName: 'Average Rank',
-            width: 130
-        },
-
+        { field: 'average_rank', headerName: 'Average Rank', width: 130},
+        { field: 'game_mode', headerName: 'Game Mode', width: 130, valueGetter:getGameMode},
+        { field: 'duration', headerName: 'Duration (Mins)', width: 130, valueGetter:getDuration},
     ];
 
     useEffect(() => {
         fetch(`https://api.opendota.com/api/players/${props.id}/recentMatches`).then((Response) => Response.json()).then((data) => {
             setRecentMatches(data)
+            console.log("The matches data is " + data)
         })
     }, [props.id]);
 
@@ -294,6 +282,15 @@ function ProPLayer() {
                             </Typography>
                             <Typography variant="body1" color="text.secondary">
                                 Last Online : {convertDate(data.last_match_time)}
+                            </Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                Country : {data.loccountrycode ? getCountry(data.loccountrycode) : 'N/A'}
+                            </Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                Role : {data.fantasy_role? getRole(data.fantasy_role) : 'N/A'}
+                            </Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                Team : {data.team_name? data.team_name : 'N/A'}
                             </Typography>
                         </CardContent>
                         <CardActions>
