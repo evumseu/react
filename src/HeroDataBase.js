@@ -1963,3 +1963,181 @@ export const HeroDataBase =  [
       "name": "game_mode_coaches_challenge"
     }
   ]
+
+  export const rank = [
+    {
+      "rank_tier": 11,
+      "name": "Herald I",
+      "mmr" : 0
+    },
+    {
+      "rank_tier": 12,
+      "name": "Herald II",
+      "mmr" : 154
+    },
+    {
+      "rank_tier": 13,
+      "name": "Herald III",
+      "mmr" : 308
+    },
+    {
+      "rank_tier": 14,
+      "name": "Herald IV",
+      "mmr" : 462
+    },
+    {
+      "rank_tier": 15,
+      "name": "Herald V",
+      "mmr" : 616
+    },
+    {
+      "rank_tier": 21,
+      "name": "Guardian I",
+      "mmr" : 770
+    },
+    {
+      "rank_tier": 22,
+      "name": "Guardian II",
+      "mmr" : 924
+    },
+    {
+      "rank_tier": 23,
+      "name": "Guardian III",
+      "mmr" : 1078
+    },
+    {
+      "rank_tier": 24,
+      "name": "Guardian IV",
+      "mmr" : 1232
+    },
+    {
+      "rank_tier": 25,
+      "name": "Guardian V",
+      "mmr" : 1386
+    },
+    {
+      "rank_tier": 31,
+      "name": "Crusader I",
+      "mmr" : 1540
+    },
+    {
+      "rank_tier": 32,
+      "name": "Crusader II",
+      "mmr" : 1694
+    },
+    {
+      "rank_tier": 33,
+      "name": "Crusader III",
+      "mmr" : 1848
+    },
+    {
+      "rank_tier": 34,
+      "name": "Crusader IV",
+      "mmr" : 2002
+    },
+    {
+      "rank_tier": 35,
+      "name": "Crusader V",
+      "mmr" : 2156
+    },
+    {
+      "rank_tier": 41,
+      "name": "Archon I",
+      "mmr" : 2310
+    },
+    {
+      "rank_tier": 42,
+      "name": "Archon II",
+      "mmr" : 2464
+    },
+    {
+      "rank_tier": 43,
+      "name": "Archon III",
+      "mmr" : 2618
+    },
+    {
+      "rank_tier": 44,
+      "name": "Archon IV",
+      "mmr" : 2772
+    },
+    {
+      "rank_tier": 45,
+      "name": "Archon V",
+      "mmr" : 2926
+    },
+    {
+      "rank_tier": 51,
+      "name": "Legend I",
+      "mmr" : 3080
+    },
+    {
+      "rank_tier": 52,
+      "name": "Legend II",
+      "mmr" : 3234
+    },
+    {
+      "rank_tier": 53,
+      "name": "Legend III",
+      "mmr" : 3388
+    },
+    {
+      "rank_tier": 54,
+      "name": "Legend IV",
+      "mmr" : 3542
+    },
+    {
+      "rank_tier": 55,
+      "name": "Legend V",
+      "mmr" : 3696
+    },
+    {
+      "rank_tier": 61,
+      "name": "Ancient I",
+      "mmr" : 3850
+    },
+    {
+      "rank_tier": 62,
+      "name": "Ancient II",
+      "mmr" : 4004
+    },
+    {
+      "rank_tier": 63,
+      "name": "Ancient III",
+      "mmr" : 4158
+    },
+    {
+      "rank_tier": 64,
+      "name": "Ancient IV",
+      "mmr" : 4312
+    },
+    {
+      "rank_tier": 65,
+      "name": "Ancient V",
+      "mmr" : 4466
+    },
+    {
+      "rank_tier": 71,
+      "name": "Divine I",
+      "mmr" : 4620
+    },
+    {
+      "rank_tier": 72,
+      "name": "Divine II",
+      "mmr" : 4820
+    },
+    {
+      "rank_tier": 73,
+      "name": "Divine III",
+      "mmr" : 5020
+    },
+    {
+      "rank_tier": 74,
+      "name": "Divine IV",
+      "mmr" : 5220
+    },
+    {
+      "rank_tier": 75,
+      "name": "Divine V",
+      "mmr" : 5420
+    },
+  ]

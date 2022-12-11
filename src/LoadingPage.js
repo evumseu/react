@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useState, useEffect } from "react"
 import { TextField, Button, Box, Avatar, Card, CardActions, CardContent, CardMedia, Typography, AppBar, Toolbar, Grid } from "@mui/material"
 import { DataGrid } from '@mui/x-data-grid';
-import { convertDate, getHero, getHeroAvatar, getTeam, getResult, generateRandom, getGameMode, getDuration, getCountry, getRole} from "./Utils"
+import { convertDate, getHero, getHeroAvatar, getTeam, getResult, generateRandom, getGameMode, getDuration, getCountry, getRole, getRankByTier} from "./Utils"
 import './LoadingPage.css';
 
 function LoadUserData() {
@@ -99,6 +99,8 @@ function LoadUserData() {
 
 function HomePage() {
 
+    console.log(getRankByTier(2553))
+
     return <div>
         <h1>This is Homepage</h1>
 
@@ -170,7 +172,7 @@ function MatchesTable(props) {
         { field: 'kills', headerName: 'Kills', width: 130 },
         { field: 'deaths', headerName: 'Deaths', width: 130 },
         { field: 'assists', headerName: 'Assists', width: 130 },
-        { field: 'average_rank', headerName: 'Average Rank', width: 130},
+        { field: 'average_rank', headerName: 'Skill Rank', width: 130, valueGetter:getRankByTier},
         { field: 'game_mode', headerName: 'Game Mode', width: 130, valueGetter:getGameMode},
         { field: 'duration', headerName: 'Duration (Mins)', width: 130, valueGetter:getDuration},
     ];

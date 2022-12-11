@@ -1,4 +1,4 @@
-import { HeroDataBase, GameMode } from "./HeroDataBase"
+import { HeroDataBase, GameMode, rank } from "./HeroDataBase"
 
 export const convertDate = (date) => {
     var d = new Date(date);
@@ -110,3 +110,18 @@ export const getRole = (role) => {
             break;
     }
 }
+
+export const getRankByTier = (params) => {
+   var index = rank.findLastIndex((element) => element.rank_tier <= params.value)
+   var data = 'N/A'
+   if(index !== -1){
+    data = rank[index].name
+   }
+   return data
+
+}
+
+export const getRankByMMR = (mmr) => {
+    var index = rank.findLastIndex((element) => element.mmr <= mmr)
+    return rank[index].name
+ }
