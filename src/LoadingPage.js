@@ -1,10 +1,10 @@
-import { HeroDataBase } from "./HeroDataBase"
-import { SEU_USER_ID, ProfileData, WinLost, RecentMatches, playerLists } from "./OpenDotaDB"
+import { SEU_USER_ID, ProfileData, WinLost, RecentMatches, PlayerLists, ProPlayerList} from "./OpenDotaDB"
 import { BrowserRouter, Routes, Route, useParams, useNavigate, NavLink } from "react-router-dom"
 import * as React from 'react';
 import { useState, useEffect } from "react"
 import { TextField, Button, Box, Avatar, Card, CardActions, CardContent, CardMedia, Typography, AppBar, Toolbar, Grid } from "@mui/material"
 import { DataGrid } from '@mui/x-data-grid';
+import { convertDate, getHero, getHeroAvatar, getTeam, getResult, generateRandom} from "./Utils"
 import './LoadingPage.css';
 
 function LoadUserData() {
@@ -115,6 +115,7 @@ function LoadingPage() {
                 <Route path="/" element={<HomePage />}></Route>
                 <Route path="/player/:queryId" element={<LoadUserData />}></Route>
                 <Route path="/players/:queryString" element={<PlayerList />}></Route>
+                <Route path="/pros" element={<ProPLayer/>}></Route>
                 <Route path="*" element={<p>404 Page Not Found</p>} />
             </Routes>
         </BrowserRouter>
@@ -127,32 +128,19 @@ function TopAppHeader() {
             <AppBar position="static">
                 <Toolbar>
                     <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="/"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            letterSpacing: '.3rem',
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}>
-                        Dota2
+                        variant="h6" noWrap component="a" href="/"
+                        sx={{mr: 2, display: { xs: 'none', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, letterSpacing: '.3rem', color: 'inherit', textDecoration: 'none',}}
+                        >Dota2
                     </Typography>
                     {"   "}
                     <Button color="inherit">Match</Button>
                     <Button color="inherit"><NavLink
                         to={`player/${SEU_USER_ID}`}
-                        style={{
-                            color: 'white',
-                            textDecoration: 'none',
-                        }}>
-                        Player
+                        style={{color: 'white', textDecoration: 'none',}}
+                        >Player
                     </NavLink></Button>
-                    <Button color="inherit"><NavLink to>Top Player</NavLink></Button>
+                    <Button color="inherit"><NavLink to={`pros`}
+                        style={{color: 'white', textDecoration: 'none',}}>Top Player</NavLink></Button>
                 </Toolbar>
             </AppBar>
         </Box>
@@ -163,52 +151,7 @@ function TopAppHeader() {
 
 function MatchesTable(props) {
 
-    function getTeam(params) {
-        if (params.value > 127) {
-            return "Dire"
-        } else {
-            return "Radiant"
-        }
-    }
-
-    function getResult(params) {
-        if (params.row.player_slot > 127) {
-            if (params.value) {
-                return "Lost"
-            } else {
-                return "Win"
-            }
-        } else {
-            if (params.value) {
-                return "Win"
-            } else {
-                return "Lost"
-            }
-        }
-    }
-
-    function getHero(params) {
-        for (var i = 0; i < HeroDataBase.length; i++) {
-            if (params.value === HeroDataBase[i].id) {
-                return HeroDataBase[i].localized_name
-            }
-        }
-    }
-
-    function getHeroAvatar(params) {
-        for (var i = 0; i < HeroDataBase.length; i++) {
-            if (params.value === HeroDataBase[i].id) {
-                var name = '' + HeroDataBase[i].localized_name
-                var result = name.toLocaleLowerCase().replace(/ /g, '')
-                var link = "https://cdn.cloudflare.steamstatic.com/apps/dota2/images/dota_react/heroes/" + result + ".png"
-                return link
-            }
-        }
-
-    }
-
     const [recentMatches, setRecentMatches] = useState(RecentMatches);
-
     const column = [
         {
             field: 'hero_id',
@@ -246,12 +189,9 @@ function MatchesTable(props) {
     ];
 
     useEffect(() => {
-
         fetch(`https://api.opendota.com/api/players/${props.id}/recentMatches`).then((Response) => Response.json()).then((data) => {
             setRecentMatches(data)
         })
-
-
     }, [props.id]);
 
     return (
@@ -269,37 +209,18 @@ function MatchesTable(props) {
     );
 }
 
-function generateRandom() {
-    var length = 8,
-        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789",
-        retVal = "";
-    for (var i = 0, n = charset.length; i < length; ++i) {
-        retVal += charset.charAt(Math.floor(Math.random() * n));
-    }
-    return retVal;
-}
-
 function PlayerList() {
 
     const navigate = useNavigate()
     const params = useParams()
     const [queryString, setQueryString] = useState(params.queryString ? params.queryString : '')
-    const [playerList, setPlayerList] = useState(playerLists)
+    const [playerList, setPlayerList] = useState(PlayerLists)
 
     useEffect(() => {
         fetch(`https://api.opendota.com/api/search?q=${queryString}`).then((Response) => Response.json()).then((data) => {
             setPlayerList(data)
-            console.log(data)
         })
-
     }, [params.queryString]);
-
-    function convertDate(date) {
-        var d = new Date(date);
-        var month = d.getUTCMonth() + 1
-        var dates = d.getUTCDate() + "-" + month + "-" + d.getUTCFullYear()
-        return dates
-    }
 
     const toUserData = (id) => {
         navigate(`/player/${id}`)
@@ -315,7 +236,7 @@ function PlayerList() {
                         <CardMedia
                             component="img"
                             height="150"
-                            sx={{ padding: "3px 3px 3px 3px", objectFit: "contain", justifyContent: "center" }}
+                            sx={{ padding: "6px 6px 6px 6px", objectFit: "contain", justifyContent: "center" }}
                             src={data.avatarfull}
                             alt={data.personaname}
 
@@ -335,13 +256,55 @@ function PlayerList() {
                 </Grid>
 
             ))}
-
-
         </Grid>
-
-
     </div>
+}
 
+function ProPLayer() {
+
+    const navigate = useNavigate()
+    const [proPlayerList , setProPlayerList] = useState(ProPlayerList)
+
+    useEffect(() => {
+        fetch(`https://api.opendota.com/api/proPlayers`).then((Response) => Response.json()).then((data) => {
+            setProPlayerList(data)
+            console.log(data)
+        })
+    }, []);
+
+    const toUserData = (id) => {
+        navigate(`/player/${id}`)
+
+    }
+
+    return <div>
+        <Grid container spacing={2} direction="row" justify="flex-start" alignItems="flex-start">
+            {proPlayerList.slice(0,500).map((data, index) => (
+                <Grid item xs={12} sm={6} md={3} key={index}>
+                    <Card sx={{ maxWidth: 345 }}>
+                        <CardMedia
+                            component="img"
+                            height="150"
+                            sx={{ padding: "6px 6px 6px 6px", objectFit: "contain", justifyContent: "center" }}
+                            src={data.avatarfull}
+                            alt={data.personaname}/>
+                        <CardContent>
+                            <Typography gutterBottom variant="h5" component="div">
+                                {data.personaname}
+                            </Typography>
+                            <Typography variant="body1" color="text.secondary">
+                                Last Online : {convertDate(data.last_match_time)}
+                            </Typography>
+                        </CardContent>
+                        <CardActions>
+                            <Button size="small" onClickCapture={() => toUserData(data.account_id)}>More Details</Button>
+                        </CardActions>
+                    </Card>
+                </Grid>
+
+            ))}
+        </Grid>
+    </div>
 }
 
 
