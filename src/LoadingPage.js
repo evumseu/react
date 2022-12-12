@@ -210,7 +210,6 @@ function TopAppHeader() {
                     >Dota2
                     </Typography>
                     {"   "}
-                    <Button color="inherit">Match</Button>
                     <Button color="inherit"><NavLink
                         to={`player/${SEU_USER_ID}`}
                         style={{ color: 'white', textDecoration: 'none', }}
@@ -250,6 +249,11 @@ function MatchesTable(props) {
         { field: 'average_rank', headerName: 'Skill Rank', width: 130, valueGetter: getRankByTier },
         { field: 'game_mode', headerName: 'Game Mode', width: 130, valueGetter: getGameMode },
         { field: 'duration', headerName: 'Duration (Mins)', width: 130, valueGetter: getDuration },
+        { field: 'last_hits', headerName: 'Last Hit', width: 130},
+        { field: 'xp_per_min', headerName: 'XPM', width: 130},
+        { field: 'gold_per_min', headerName: 'GPM', width: 130},
+        { field: 'hero_damage', headerName: 'Damage To Hero', width: 130},
+
     ];
 
     useEffect(() => {
