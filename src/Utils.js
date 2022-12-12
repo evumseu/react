@@ -112,16 +112,19 @@ export const getRole = (role) => {
 }
 
 export const getRankByTier = (params) => {
-   var index = rank.findLastIndex((element) => element.rank_tier <= params.value)
-   var data = 'N/A'
-   if(index !== -1){
-    data = rank[index].name
-   }
-   return data
-
+    if (params.value < 75) {
+        var index = rank.findLastIndex((element) => element.rank_tier <= params.value)
+        var data = 'N/A'
+        if (index !== -1) {
+            data = rank[index].name
+        }
+        return data
+    } else {
+        return 'Immortal'
+    }
 }
 
 export const getRankByMMR = (mmr) => {
     var index = rank.findLastIndex((element) => element.mmr <= mmr)
     return rank[index].name
- }
+}

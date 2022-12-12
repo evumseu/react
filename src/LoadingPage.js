@@ -1,10 +1,10 @@
-import { SEU_USER_ID, ProfileData, WinLost, RecentMatches, PlayerLists, ProPlayerList} from "./OpenDotaDB"
+import { SEU_USER_ID, ProfileData, WinLost, RecentMatches, PlayerLists, ProPlayerList } from "./OpenDotaDB"
 import { BrowserRouter, Routes, Route, useParams, useNavigate, NavLink } from "react-router-dom"
 import * as React from 'react';
 import { useState, useEffect } from "react"
-import { TextField, Button, Box, Avatar, Card, CardActions, CardContent, CardMedia, Typography, AppBar, Toolbar, Grid } from "@mui/material"
+import { TextField, Button, Box, Avatar, Card, CardActions, CardContent, CardMedia, Typography, AppBar, Toolbar, Grid, CardActionArea } from "@mui/material"
 import { DataGrid } from '@mui/x-data-grid';
-import { convertDate, getHero, getHeroAvatar, getTeam, getResult, generateRandom, getGameMode, getDuration, getCountry, getRole, getRankByTier} from "./Utils"
+import { convertDate, getHero, getHeroAvatar, getTeam, getResult, generateRandom, getGameMode, getDuration, getCountry, getRole, getRankByTier } from "./Utils"
 import './LoadingPage.css';
 
 function LoadUserData() {
@@ -40,16 +40,20 @@ function LoadUserData() {
     }, [params.queryId]);
 
     return <div>
+        <br /> <br />
         <form onSubmit={handleSubmit}>
-            <TextField
-                id="serach"
-                label="Search"
-                variant="outlined"
-                size="medium"
-                value={query}
-                onChange={onSearchChanged}
-            ></TextField> {' '}
-            <Button variant="contained" size="large" onClick={handleSubmit}>Search</Button>
+            <div className="center">
+                <TextField
+                    id="serach"
+                    label="Search"
+                    variant="outlined"
+                    size="medium"
+                    value={query}
+                    onChange={onSearchChanged}
+                ></TextField> {' '}
+                <Button variant="contained" size="large" onClick={handleSubmit}>Search</Button>
+            </div>
+
 
             <div>
                 <div className="container">
@@ -99,12 +103,84 @@ function LoadUserData() {
 
 function HomePage() {
 
-    console.log(getRankByTier(2553))
+    const navigate = useNavigate()
 
-    return <div>
-        <h1>This is Homepage</h1>
+    const toPlayer = (id) => {
+        navigate(`/player/${id}`)
+    }
 
+    const toProPlayer = () => {
+        navigate(`/pros`)
+    }
+
+    return <div style={{
+        backgroundImage: `url(${process.env.PUBLIC_URL + '/img/homepage_backdrop.jpg'})`,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        backgroundposition: 'center',
+        height: '900px'
+    }}>
+        <Typography pt={2} textAlign={"center"} variant="h3" color="text.primary" sx={{ fontFamily: 'Fantasy', fontWeight: 600, letterSpacing: '.2rem', color: 'red', textDecoration: 'none', }} >
+            Dota 2 Statistics Platform
+        </Typography>
+        <Typography pt={2} textAlign={"center"} variant="h4" color="text.primary" sx={{ fontFamily: 'Fantasy', fontWeight: 300, letterSpacing: '.1rem', textDecoration: 'none', }} >
+            Analyst Your Dota 2 Data
+        </Typography>
+        <Typography pt={2} textAlign={"center"} variant="body1" color="text.primary" sx={{ fontFamily: 'Sans-serif', letterSpacing: '.0.5rem', textDecoration: 'none', }} >
+            Powered By OpenDota API
+        </Typography>
+
+
+
+        <div className="homepage_container">
+            <Card sx={{ width: 350, margin: 15 }}>
+                <CardActionArea onClick={() => toPlayer(SEU_USER_ID)}>
+                    <CardMedia
+                        component="img"
+                        height="200"
+                        sx={{ objectFit: "fit", justifyContent: "center" }}
+                        src={window.location.origin + '/img/first_card_bg.jpg'}
+                        alt={'first_card_bg'}
+
+                    />
+                    <CardContent>
+                        <Typography textAlign="center" gutterBottom variant="h5" component="div">
+                            Player
+                        </Typography>
+                        <Typography fontFamily={"Sans-serif"} textAlign="center" variant="body1" color="text.primary">
+                            Find Your Data or Your Friend Data By ID or Name
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
+
+            <Card sx={{ width: 350, margin: 15 }}>
+                <CardActionArea onClick={() => toProPlayer()}>
+                    <CardMedia
+                        component="img"
+                        height="200"
+                        sx={{ objectFit: "fit", justifyContent: "center" }}
+                        src={window.location.origin + '/img/second_card_bg.jpg'}
+                        alt={'second_card_bg'}
+
+                    />
+                    <CardContent>
+                        <Typography textAlign="center" gutterBottom variant="h5" component="div">
+                            Pro Player
+                        </Typography>
+                        <Typography fontFamily={"Sans-serif"} textAlign="center" variant="body1" color="text.primary">
+                            Review Pro Player Data And Learn New Meta
+                        </Typography>
+                    </CardContent>
+                </CardActionArea>
+            </Card>
     </div>
+
+
+
+
+
+    </div >
 }
 
 function LoadingPage() {
@@ -112,12 +188,11 @@ function LoadingPage() {
     return <div>
         <BrowserRouter>
             <TopAppHeader />
-            <br /><br />
             <Routes>
                 <Route path="/" element={<HomePage />}></Route>
                 <Route path="/player/:queryId" element={<LoadUserData />}></Route>
                 <Route path="/players/:queryString" element={<PlayerList />}></Route>
-                <Route path="/pros" element={<ProPLayer/>}></Route>
+                <Route path="/pros" element={<ProPLayer />}></Route>
                 <Route path="*" element={<p>404 Page Not Found</p>} />
             </Routes>
         </BrowserRouter>
@@ -131,18 +206,18 @@ function TopAppHeader() {
                 <Toolbar>
                     <Typography
                         variant="h6" noWrap component="a" href="/"
-                        sx={{mr: 2, display: { xs: 'none', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, letterSpacing: '.3rem', color: 'inherit', textDecoration: 'none',}}
-                        >Dota2
+                        sx={{ mr: 2, display: { xs: 'none', md: 'flex' }, fontFamily: 'monospace', fontWeight: 700, letterSpacing: '.3rem', color: 'inherit', textDecoration: 'none', }}
+                    >Dota2
                     </Typography>
                     {"   "}
                     <Button color="inherit">Match</Button>
                     <Button color="inherit"><NavLink
                         to={`player/${SEU_USER_ID}`}
-                        style={{color: 'white', textDecoration: 'none',}}
-                        >Player
+                        style={{ color: 'white', textDecoration: 'none', }}
+                    >Player
                     </NavLink></Button>
-                    <Button color="inherit"><NavLink to={`pros`}
-                        style={{color: 'white', textDecoration: 'none',}}>Top Player</NavLink></Button>
+                    <Button color="inherit"><NavLink to={`/pros`}
+                        style={{ color: 'white', textDecoration: 'none', }}>Top Player</NavLink></Button>
                 </Toolbar>
             </AppBar>
         </Box>
@@ -167,14 +242,14 @@ function MatchesTable(props) {
                 );
             }
         },
-        { field: 'player_slot', headerName: 'Team', width: 130, valueGetter: getTeam},
-        { field: 'radiant_win', headerName: 'Result', width: 130, valueGetter: getResult},
+        { field: 'player_slot', headerName: 'Team', width: 130, valueGetter: getTeam },
+        { field: 'radiant_win', headerName: 'Result', width: 130, valueGetter: getResult },
         { field: 'kills', headerName: 'Kills', width: 130 },
         { field: 'deaths', headerName: 'Deaths', width: 130 },
         { field: 'assists', headerName: 'Assists', width: 130 },
-        { field: 'average_rank', headerName: 'Skill Rank', width: 130, valueGetter:getRankByTier},
-        { field: 'game_mode', headerName: 'Game Mode', width: 130, valueGetter:getGameMode},
-        { field: 'duration', headerName: 'Duration (Mins)', width: 130, valueGetter:getDuration},
+        { field: 'average_rank', headerName: 'Skill Rank', width: 130, valueGetter: getRankByTier },
+        { field: 'game_mode', headerName: 'Game Mode', width: 130, valueGetter: getGameMode },
+        { field: 'duration', headerName: 'Duration (Mins)', width: 130, valueGetter: getDuration },
     ];
 
     useEffect(() => {
@@ -218,6 +293,7 @@ function PlayerList() {
     }
 
     return <div>
+        <br /> <br />
         <Grid container spacing={2} direction="row" justify="flex-start" alignItems="flex-start">
 
             {playerList.map((data, index) => (
@@ -253,7 +329,7 @@ function PlayerList() {
 function ProPLayer() {
 
     const navigate = useNavigate()
-    const [proPlayerList , setProPlayerList] = useState(ProPlayerList)
+    const [proPlayerList, setProPlayerList] = useState(ProPlayerList)
 
     useEffect(() => {
         fetch(`https://api.opendota.com/api/proPlayers`).then((Response) => Response.json()).then((data) => {
@@ -268,8 +344,9 @@ function ProPLayer() {
     }
 
     return <div>
+        <br /> <br />
         <Grid container spacing={2} direction="row" justify="flex-start" alignItems="flex-start">
-            {proPlayerList.slice(0,500).map((data, index) => (
+            {proPlayerList.slice(0, 500).map((data, index) => (
                 <Grid item xs={12} sm={6} md={3} key={index}>
                     <Card sx={{ maxWidth: 345 }}>
                         <CardMedia
@@ -277,7 +354,7 @@ function ProPLayer() {
                             height="150"
                             sx={{ padding: "6px 6px 6px 6px", objectFit: "contain", justifyContent: "center" }}
                             src={data.avatarfull}
-                            alt={data.personaname}/>
+                            alt={data.personaname} />
                         <CardContent>
                             <Typography gutterBottom variant="h5" component="div">
                                 {data.personaname}
@@ -289,10 +366,10 @@ function ProPLayer() {
                                 Country : {data.loccountrycode ? getCountry(data.loccountrycode) : 'N/A'}
                             </Typography>
                             <Typography variant="body1" color="text.secondary">
-                                Role : {data.fantasy_role? getRole(data.fantasy_role) : 'N/A'}
+                                Role : {data.fantasy_role ? getRole(data.fantasy_role) : 'N/A'}
                             </Typography>
                             <Typography variant="body1" color="text.secondary">
-                                Team : {data.team_name? data.team_name : 'N/A'}
+                                Team : {data.team_name ? data.team_name : 'N/A'}
                             </Typography>
                         </CardContent>
                         <CardActions>
